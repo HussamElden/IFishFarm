@@ -197,4 +197,4 @@ def featuresCalc(arr,fps):
     row_of_avgs.append(avg_dir)
     row_of_avgs.append(avg_count)
     row_of_avgs.append(avg_dist)
-    return matrix,row_of_avgs
+    return row_of_avgs

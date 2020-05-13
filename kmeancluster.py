@@ -2,8 +2,8 @@ import os
 import math
 from scipy.spatial import distance
 import cv2
-aDATADIR = "abnormal5"
-nDATADIR = "normal5"
+aDATADIR = "abnormal10"
+nDATADIR = "normal10"
 def Average(lst):
     return sum(lst) / len(lst)
 class kmeans:

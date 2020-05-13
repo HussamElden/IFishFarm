@@ -1,48 +1,12 @@
 import numpy as np
 import cv2
-# from skimage import io, img_as_float
-#
-# image = cv2.imread('data/1.jpg')
-# image=np.array(image).astype(np.float32)
-#
-# print(image[..., 2].min())
+
 
 def singleScaleRetinex(img, sigma):
 
     retinex = np.log10(img) - np.log10(cv2.GaussianBlur(img, (0, 0), sigma))
 
     return retinex
-
-
-# def colorPreCorrect(image):
-#     img=np.array(image).astype(np.float32)
-#     redMin=img[..., 0].min()
-#     redMax = img[..., 0].max()
-#     greenMin = img[..., 1].min()
-#     greenMax = img[..., 1].max()
-#     blueMin = img[..., 2].min()
-#     blueMax = img[..., 2].max()
-#
-#     # iMean=np.mean(img)
-#     # iVar=np.std(img)
-#     height, width, channels = image.shape
-#     NewImg = np.zeros([height, width,channels], image.dtype)
-#     for chan in range(channels):
-#      for col in range(1, width, 2):
-#       for row in range(1, height, 2):
-#        px=image[row,col]
-#        if(chan==0):
-#           retinex = (px-redMin)/(redMax-redMin)
-#        elif(chan == 1):
-#            retinex = (px - greenMin) / (greenMax - greenMin)
-#        else:
-#            retinex=(px - blueMin) / (blueMax - blueMin)
-#
-#        NewImg[row,col]=retinex
-#     return NewImg
-#
-# cv2.imshow("",colorPreCorrect(cv2.imread('data/1.jpg')))
-# cv2.waitKey()
 
 def multiScaleRetinex(img, sigma_list):
 
