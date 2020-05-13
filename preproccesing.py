@@ -1,4 +1,5 @@
 import math
+import statistics
 from itertools import zip_longest
 from pandas import *
 import scipy.interpolate as interp
@@ -75,8 +76,15 @@ def preprocess_csv(raw_arr):
 
     #     new_2d_array = [append(item)]
     return zip_longest(*new_2d_array)
-def featuresCalc(arr):
-    time = 5
+def featuresCalc(arr,fps):
+    all_x = []
+    all_y = []
+    all_speed = []
+    all_dir = []
+    all_count = []
+    all_dist = []
+    row_of_avgs = []
+    time = 2/fps
     i = 0
     matrix = []
     minX = 999
@@ -102,31 +110,21 @@ def featuresCalc(arr):
                 distance_no_root = pow((arr[i][j]) - int(arr[i - 1][j]), 2) + pow((arr[i][j + 1]) - (arr[i - 1][j + 1]),
                                                                                   2)
                 dist = math.sqrt(distance_no_root)
-                Speed = int(((dist / time)+10))
+                Speed = int(((dist / time) + 10))
                 if (x2 < x1 and y2 == y1):
-                    # print(x)
-                    # print(y)
-                    # print("West")
+
                     dir = 4
                 elif (x2 < x1 and y2 > y1):
-                    # print(x)
-                    # print(y)
-                    # print("North West")
+
                     dir = 8
                 elif (x2 < x1 and y2 < y1):
-                    # print(x)
-                    # print(y)
-                    # print("South West")
+
                     dir = 7
                 elif (x2 > x1 and y2 == y1):
-                    # print(x)
-                    # print(y)
-                    # print("East")
+
                     dir = 2
                 elif (x2 > x1 and y2 > y1):
-                    # print(x)
-                    # print(y)
-                    # print("North East")
+
                     dir = 5
                 elif (x2 > x1 and y2 < y1):
 
@@ -138,9 +136,7 @@ def featuresCalc(arr):
 
                     dir = 3
                 elif (x2 == x1 and y2 == y1):
-                    # print(x2)
-                    # print(x1)
-                    # print("Didn't move")
+
                     dir = 0
 
                 if (i == 1):
@@ -176,6 +172,11 @@ def featuresCalc(arr):
                     matrix[i - 1].append(Speed)
                     matrix[i - 1].append(dir)
                     matrix[i - 1].append(count)
+                all_x.append(arr[i - 1][normalCounteer])
+                all_y.append(arr[i - 1][normalCounteer + 1])
+                all_speed.append(Speed)
+                all_dir.append(dir)
+                all_count.append(count)
                 normalCounteer += 2
 
         PatternCounter = -1
@@ -183,4 +184,17 @@ def featuresCalc(arr):
         dist = math.sqrt(MaxDistance)
         # matrix+=[dist]
         matrix[i - 1].append(dist)
-    return matrix
+        all_dist.append(dist)
+    avg_x = abs(statistics.mean(all_x))
+    avg_y = abs(statistics.mean(all_y))
+    avg_speed = abs(statistics.mean(all_speed))
+    avg_dir = abs(statistics.mean(all_dir))
+    avg_count = abs(statistics.mean(all_count))
+    avg_dist = abs(statistics.mean(all_dist))
+    row_of_avgs.append(avg_x)
+    row_of_avgs.append(avg_y)
+    row_of_avgs.append(avg_speed)
+    row_of_avgs.append(avg_dir)
+    row_of_avgs.append(avg_count)
+    row_of_avgs.append(avg_dist)
+    return matrix,row_of_avgs
