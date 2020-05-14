@@ -61,11 +61,11 @@ def MSRCR(img, sigma_list, G, b, alpha, beta, low_clip, high_clip):
 
     return img_msrcr
 
-def automatedMSRCR(img, sigma_list):
+def automatedMSRCR(img):
 
     img = np.float64(img) + 1.0
 
-    img_retinex = multiScaleRetinex(img, sigma_list)
+    img_retinex = multiScaleRetinex(img, [15, 80, 250])
 
     for i in range(img_retinex.shape[2]):
         unique, count = np.unique(np.int32(img_retinex[:, :, i] * 100), return_counts=True)
