@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Home</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='mazra3a.css') }}">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+	</head>
+	<body class="loggedin">
+		<nav class="navtop">
+			<div>
+				<h1>IFishFarm</h1>
+                <a href="{{ url_for('home') }}"><i class="fas fa-home"></i>Home</a>
+				<a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i>Logout</a>
+			</div>
+        </nav>
+        <div class="content">
+            <div class="register" style="margin-top: 25px;padding-top: 0px;padding-left: 10px;padding-bottom: 5px;width:100%">
+                <h1>Suez Canal Fish farms</h1>
+            </div>
+            <div class="register" style="float: left; margin-top: 25px;padding-top: 0px;padding-left: 10px;padding-bottom: 5px;width:30%">
+                <div class="scrollablelist" >
+                    <a href="#">Pond 1</a>
+                    <a href="#">Pond 2</a>
+                    <a href="#">Pond 3</a>
+                    <a href="#">Pond 4</a>
+                    <a href="{{ url_for('pond') }}">Pond 5</a>
+                    <a href="#">Pond 6</a>
+                    <a href="#">Pond 7</a>
+                    <a href="#">Pond 8</a>
+                    <a href="#">Pond 9</a>
+                    <a href="#">Pond 10</a>
+                    <a href="#">Pond 11</a>
+                </div>
+            </div>
+            <div class="register" style="float: right; margin-top: 25px;padding-top: 0px;padding-left: 10px;padding-bottom: 5px;width:30%; height: 210px;">
+                <h2>Alerts</h2>
+                <div style="overflow:hidden;
+                overflow-y: scroll;">
+                    <h3>Pond 5: Normal Behavior</h3>
+                    <h3>pond 6: Abnormal Behavior</h3>
+
+                </div>
+                
+            </div>
+            
+            <div class="register" style="float: right; margin-left: 60%; padding-top: 0px;padding-left: 10px;padding-bottom: 5px;width:30%;background-color: #3274d6 ;">
+               <a href="{{ url_for('stats') }}" class="button">Reports</a>
+            </div>
+           
+		</div>
+		
+	</body>
+</html>

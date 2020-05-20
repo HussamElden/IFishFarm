@@ -1,0 +1,70 @@
+{% extends 'layout.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h2>Pond 5</h2>
+<div class = "container">
+    <div class = "row">
+        <div class = "col-md-8">
+            <img src="{{ url_for('calc') }}">
+        </div>
+        <div class = "col-md-4">
+            <div id = "waterStatusDiv" class = "alert alert-success">
+                <p id = "water_status"></p>
+                <h3 id = "average_size"></h3>
+            </div>
+            <div id = "behaviorDiv" class = "alert alert-success">
+                <p id = "current_behavior"></p>
+            </div>
+            <br>
+            <br>
+            <div class = "align-bottom">
+                <a href = "{{url_for('alert')}}">
+                <button class = "btn btn-block btn-danger invisible" id = "alertButton" style = "width:100%;">Alert: Click for details</button>
+                </a>
+                <button class = "btn btn-block btn-primary" style = "width:100%;">Reports</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+function sendYoloData()
+    {
+        var waterStatus = $('#water_status').val();
+        var currentBehavior = $('#current_behavior').val();
+		$.ajax({
+			url: '/getYoloData',
+			data: {'h':'h'},
+			type: 'POST',
+			success: function(data){
+                var values = jQuery.parseJSON(data);
+                $('#water_status').html("Water Status: " + values.waterStatus);
+                $('#current_behavior').html("Current Behavior: " + values.currentBehavior);
+                if(values.waterStatus == "Toxic")
+                {
+                    $('#alertButton').removeClass('invisible');
+                    $('#alertButton').addClass('visible');
+                    $('#waterStatusDiv').removeClass('alert-primary');
+                    $('#behaviorDiv').removeClass('alert-primary');
+                    $('#waterStatusDiv').addClass('alert-danger');
+                    $('#behaviorDiv').addClass('alert-danger');
+                }
+                else
+                {
+                    $('#alertButton').removeClass('visible');
+                    $('#alertButton').addClass('invisible');
+                    $('#waterStatusDiv').removeClass('alert-danger');
+                    $('#behaviorDiv').removeClass('alert-danger');
+                    $('#waterStatusDiv').addClass('alert-success');
+                    $('#behaviorDiv').addClass('alert-success');
+                }
+			},
+			error: function(error){
+				console.log(error);
+			}
+		});
+    }
+setInterval(sendYoloData, 1000);
+</script>
+{% endblock %}

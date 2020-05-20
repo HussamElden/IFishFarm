@@ -1,0 +1,49 @@
+{% extends 'layout.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h2>Pond 5</h2>
+<div class = "container">
+    <div class = "row">
+        <div class = "col-md-8">
+            <img src="{{ url_for('calc') }}">
+        </div>
+        <div class = "col-md-4">
+            <div class = "alert alert-danger">
+                <h3>Alert:</h3><br>
+                <h3>Abnormal Behavior</h3>
+                <p id = "abnormal" style = "display: block;">Select the type of detected behavior for further instructions.</p>
+                <p id = "suffocation" style = "display: none;">Instructions: Open the air pump to release oxygen to the fish.</p>
+        </div>
+        </div>
+    </div>
+    <div class = "row pt-4">
+        <div class = "col-md-3">
+            <select onchange="showInstructions()" class="form-control" style = "width: auto;">
+                <option selected>Hunger</option>
+                <option>Fish Suffocation</option>
+                <option>High Ammonia Level</option>
+                <option>Low Temperature</option>
+                <option>High Temperature</option>
+              </select>
+        </div>
+        <div class = "col-md-3 ml-1">
+            <button type = "button" class = "btn btn-primary btn-lg">Confirm Behavior</button>
+        </div>
+        <div class = "col-md-3">
+        <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="New behavior name">
+        </div>
+    </div>
+</div>
+<script>
+    let abnormalText = document.getElementById("abnormal");
+    let suffocationText = document.getElementById("suffocation");
+    function showInstructions()
+    {
+        abnormalText.style.display = "none";
+        suffocationText.style.display = "block";
+
+    }
+</script>
+{% endblock %}
