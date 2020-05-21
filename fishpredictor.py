@@ -21,13 +21,13 @@ def prediction(c):
 
 font = cv2.FONT_HERSHEY_PLAIN
 
-def predictfish(z,apperance,buffer,last_changed,top,img,color,mylist,framenum):
-    if (top < z[-1][0]):
-        top = z[-1][0]
+def predictfish(fishs, apperance, buffer, last_changed, top, img, color, mylist, framenum):
+    if (top < fishs[-1][0]):
+        top = fishs[-1][0]
         # print(z[-1][0])
     fishcounter = 1
-    for i in range(len(z)):
-        templabel = z[i][0]
+    for i in range(len(fishs)):
+        templabel = fishs[i][0]
         if (fishcounter != templabel):  # predict fish
             while (fishcounter < templabel):
 
@@ -53,9 +53,9 @@ def predictfish(z,apperance,buffer,last_changed,top,img,color,mylist,framenum):
                                 buffer[fishcounter][1][last_changed[fishcounter - 1] - 1] = py
                                 last_changed[fishcounter - 1] += 1
 
-                        cv2.rectangle(img, (px, py), (px + z[i][3], py + z[i][4]), color, 2)
+                        cv2.rectangle(img, (px, py), (px + fishs[i][3], py + fishs[i][4]), color, 2)
                         mylist[framenum].append(px)
-                        mylist[framenum].append(px)
+                        mylist[framenum].append(py)
                         cv2.putText(img, '{}{}'.format("added ", fishcounter), (px, py - 5), font, 1, (255, 255, 255),
                                     2)
 
@@ -70,28 +70,28 @@ def predictfish(z,apperance,buffer,last_changed,top,img,color,mylist,framenum):
         if (fishcounter == templabel):  ##detected fish
             fishcounter += 1
 
-            mylist[framenum].append(z[i][1])
-            mylist[framenum].append(z[i][2])
+            mylist[framenum].append(fishs[i][1])
+            mylist[framenum].append(fishs[i][2])
             if (len(buffer) <= templabel):
-                buffer.append([[z[i][1]], [z[i][2]]])
+                buffer.append([[fishs[i][1]], [fishs[i][2]]])
                 apperance.append(1)
                 last_changed.append(1)
             else:
                 if (len(buffer[templabel]) <= 8):
-                    buffer[templabel][0].append(z[i][1])
-                    buffer[templabel][1].append(z[i][2])
+                    buffer[templabel][0].append(fishs[i][1])
+                    buffer[templabel][1].append(fishs[i][2])
                     last_changed[templabel - 1] += 1
                     apperance[templabel] += 1
                 else:
                     if (last_changed[templabel - 1] == 8):
                         last_changed[templabel - 1] = 1
-                        buffer[templabel][0][1] = z[i][1]
-                        buffer[templabel][1][1] = z[i][2]
+                        buffer[templabel][0][1] = fishs[i][1]
+                        buffer[templabel][1][1] = fishs[i][2]
                     else:
                         last_changed[templabel - 1] += 1
-                        buffer[templabel][0][last_changed[templabel - 1] - 1] = z[i][1]
-                        buffer[templabel][1][last_changed[templabel - 1] - 1] = z[i][2]
-    for i in range((z[-1][0]), top):  ##predeict rest of fish
+                        buffer[templabel][0][last_changed[templabel - 1] - 1] = fishs[i][1]
+                        buffer[templabel][1][last_changed[templabel - 1] - 1] = fishs[i][2]
+    for i in range((fishs[-1][0]), top):  ##predeict rest of fish
         if (apperance[fishcounter] > 1):
             px = 0
             py = 0
@@ -113,7 +113,7 @@ def predictfish(z,apperance,buffer,last_changed,top,img,color,mylist,framenum):
                         buffer[fishcounter][0][last_changed[fishcounter - 1] - 1] = px
                         buffer[fishcounter][1][last_changed[fishcounter - 1] - 1] = py
                         last_changed[fishcounter - 1] += 1
-                cv2.rectangle(img, (px, py), (px + z[0][3], py + z[0][4]), color, 2)
+                cv2.rectangle(img, (px, py), (px + fishs[0][3], py + fishs[0][4]), color, 2)
                 mylist[framenum].append(px)
                 mylist[framenum].append(py)
                 cv2.putText(img, '{}{}'.format("added ", fishcounter), (px, py - 5), font, 1, (255, 255, 255), 2)

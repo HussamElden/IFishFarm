@@ -50,7 +50,7 @@ cap = cv2.VideoCapture('chaos1.avi')
 def yolo():
     cluster = kmeancluster.kmeans()
     classifier = randomforst.randomforst()
-    samak = []
+    fishs = []
     framenum = 0
     sum = 0
     max = 0
@@ -73,7 +73,6 @@ def yolo():
     num_seconds = 10
     video = cv2.VideoWriter('videonormal/' +str(num_seconds*round(fps))+'_'+str(dt_string)+'.avi', fourcc, fps, (fwidth, fheight))
     # Read until video is completed
-    counter = 0
     buffer = [[]]
     apperance = [[]]
     last_changed = []
@@ -88,7 +87,6 @@ def yolo():
     ref_n_frame_label_flatten = []
     frm_num = 1
     coloredLine = np.random.randint(0, 255, (10000, 3))
-    arr = []
     label_cnt = 1
     min_distance = 50
     while (cap.isOpened()):
@@ -96,15 +94,11 @@ def yolo():
         if ret == True:
             if frms % 2 == 0:
                 img = VideoEnhancement.enhanceVideo(img, resize)
-                v = 0
                 cur_frame_axies = []
                 cur_frame_label = []
-                height, width, channels = img.shape
                 boxes, confidences, centers, colors = yolo.detect(img)
-                counter += 1
                 indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.1, 0.4)
                 font = cv2.FONT_HERSHEY_PLAIN
-                fishcounter = 1
                 for i in range(len(boxes)):
                     if i in indexes:
                         lbl = float('nan')
@@ -127,11 +121,10 @@ def yolo():
                             lbl = label_cnt
                             label_cnt += 1
 
-                        arr.append([counter, lbl, center_x, center_y])
                         cur_frame_label.append(lbl)
                         cur_frame_axies.append((center_x, center_y))
 
-                        samak.append([lbl, x, y, w, h])
+                        fishs.append([lbl, x, y, w, h])
                         cv2.rectangle(img, (x, y), (x + w, y + h), color, 2)
                         cv2.putText(img, '{}{}'.format("Fish", lbl), (x, y - 5), font, 1, (255, 255, 255), 2)
 
@@ -143,11 +136,11 @@ def yolo():
                 ref_n_frame_axies.append(cur_frame_axies)
                 ref_n_frame_axies_flatten = [a for ref_n_frame_axie in ref_n_frame_axies for a in ref_n_frame_axie]
                 ref_n_frame_label_flatten = [b for ref_n_frame_lbl in ref_n_frame_label for b in ref_n_frame_lbl]
-                z = sorted(samak, key=itemgetter(0))
-                samak = []
+                sortedfish = sorted(fishs, key=itemgetter(0))
+                fishs = []
 
-                if (len(z) != 0):
-                    fishpredictor.predictfish(z, apperance, buffer, last_changed, top, img, color, mylist, framenum)
+                if (len(sortedfish) != 0):
+                    fishpredictor.predictfish(sortedfish, apperance, buffer, last_changed, top, img, color, mylist, framenum)
 
                 img = cv2.add(img, mask)
                 # cv2.imshow("Image", img)
@@ -160,7 +153,7 @@ def yolo():
                 if (frms % (round(fps) * num_seconds) == 0 and frms!=0):
                     result = cluster.classify(mask)
 
-                    randomForestResult = (classifier.classify(z, mask,fps))
+                    randomForestResult = (classifier.classify(sortedfish, mask, fps))
                     print(randomForestResult)
 
                     if (result == 1 or randomForestResult[0] == 1 or randomForestResult[0] == 2):
@@ -196,10 +189,9 @@ def yolo():
                     apperance = [[]]
                     last_changed = []
                     # frms = 0
-                    counter = 0
                     mylist = [[]]
                     framenum = 0
-                    fishcounter = 1
+
                     label_cnt = 1
                     top = 0
 
